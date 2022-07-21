@@ -125,6 +125,7 @@ route.post("/addProduct", upload, async (req, resp) => {
         productName: req.body.productName,
         productPrice: req.body.productPrice,
         qty: req.body.qty,
+        imagePath: path.join(__dirname, `../public/productImage`),
         image: req.file.filename
     })
 
@@ -137,6 +138,14 @@ route.post("/addProduct", upload, async (req, resp) => {
 
 })
 
+route.get("/viewProduct", async (req, resp) => {
+    try {
+        const product = await Product.find();
+        resp.json(product);
+    } catch (error) {
+        resp.send(error)
+    }
+})
 
 
 
