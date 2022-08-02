@@ -7,7 +7,7 @@ const Category = require("../model/Category")
 const Product = require("../model/Product")
 const multer = require("multer");
 const path = require("path");
-
+const auth = require("../middleware/auth")
 
 route.get("/adminlogin", (req, resp) => {
     resp.render("adminlogin");
@@ -23,10 +23,18 @@ route.post("/login-check", async (req, resp) => {
     const password = req.body.Password;
 
     const adminData = await Admin.findOne({ Username: username });
-    console.log(adminData.Password)
+    // console.log(adminData.Password)
+
+    const token = await adminData.generateAuthToken();
+
+    resp.cookie("jwt", token, {
+        expires: new Date(Date.now() + 300000),
+        httpOnly: true
+    });
+
 
     if (adminData.Password === password) {
-        console.log("done")
+        // console.log("done")
         resp.render("dashboard")
     }
     else {
@@ -35,7 +43,7 @@ route.post("/login-check", async (req, resp) => {
 
 })
 
-route.get("/category", (res, resp) => {
+route.get("/category", auth, (res, resp) => {
     resp.render("category");
     resp.redirect("viewCategory")
 })
@@ -138,7 +146,7 @@ route.post("/addProduct", upload, async (req, resp) => {
 
 })
 
-route.get("/viewProduct", async (req, resp) => {
+route.get("/viewProduct", auth, async (req, resp) => {
     try {
         const product = await Product.find();
         resp.json(product);

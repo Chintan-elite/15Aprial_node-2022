@@ -15,6 +15,7 @@ app.set("view engine", "hbs");
 app.set("views", viewPath);
 app.use(express.static(publicPath))
 hbs.registerPartials(partialPath);
+app.use(express.json())
 
 const userrouter = require("../router/userrouter");
 app.use("/", userrouter)
