@@ -4,7 +4,9 @@ const path = require("path");
 const hbs = require("hbs");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser')
-const PORT = 3000;
+const dotenv = require('dotenv');
+dotenv.config()
+const PORT = process.env.PORT
 
 const viewPath = path.join(__dirname, "../templetes/views");
 const partialPath = path.join(__dirname, "../templetes/partials");
